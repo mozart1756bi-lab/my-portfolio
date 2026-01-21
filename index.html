@@ -1,0 +1,260 @@
+import React, { useState, useEffect } from 'react';
+import { Moon, Sun, Mail, Twitter, Instagram, Send, ChevronRight, BookOpen, Search, Cpu } from 'lucide-react';
+
+const App = () => {
+  const [darkMode, setDarkMode] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
+
+  // ダークモードの切り替え
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [darkMode]);
+
+  // スクロール時のフェードインアニメーション用
+  const [isVisible, setIsVisible] = useState({});
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible((prev) => ({ ...prev, [entry.target.id]: true }));
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+
+    document.querySelectorAll('section').forEach((section) => {
+      observer.observe(section);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const navLinks = [
+    { name: 'Home', id: 'home' },
+    { name: 'About', id: 'about' },
+    { name: 'Contact', id: 'contact' },
+  ];
+
+  return (
+    <div className={`min-h-screen transition-colors duration-500 ${darkMode ? 'bg-[#1a262b] text-gray-100' : 'bg-[#ECF0F1] text-[#2C3E50]'}`}>
+      
+      {/* Navigation */}
+      <nav className={`fixed w-full z-50 transition-all duration-300 ${darkMode ? 'bg-[#1a262b]/90 border-b border-gray-700' : 'bg-[#ECF0F1]/90 border-b border-gray-200'} backdrop-blur-md`}>
+        <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="text-2xl font-bold tracking-tighter">
+            MAMABU<span className="text-[#E74C3C]">.</span>
+          </div>
+          <div className="flex items-center space-x-8">
+            <div className="hidden md:flex space-x-6">
+              {navLinks.map((link) => (
+                <a
+                  key={link.id}
+                  href={`#${link.id}`}
+                  className="font-medium hover:text-[#E74C3C] transition-colors"
+                >
+                  {link.name}
+                </a>
+              ))}
+            </div>
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className={`p-2 rounded-full transition-colors ${darkMode ? 'bg-gray-800 text-yellow-400 hover:bg-gray-700' : 'bg-white text-[#2C3E50] hover:bg-gray-200 shadow-sm'}`}
+            >
+              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      {/* Hero Section */}
+      <section id="home" className="pt-32 pb-20 px-6 min-h-screen flex flex-col justify-center items-center text-center">
+        <div className={`transition-all duration-1000 transform ${isVisible.home ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+          <div className="inline-block px-4 py-1 mb-6 border border-[#E74C3C] text-[#E74C3C] rounded-full text-sm font-semibold tracking-widest">
+            FREELANCE WRITER
+          </div>
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+            Colors Logic,<br />
+            <span className="text-[#E74C3C]">Designs Magic.</span>
+          </h1>
+          <p className="text-xl md:text-2xl max-w-2xl mx-auto opacity-80 leading-relaxed mb-10">
+            リサーチと論理的構成に強い、理系出身ライター。<br />
+            企業の想いが「伝わる」形にします。
+          </p>
+          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 justify-center">
+            <a href="#contact" className="px-8 py-4 bg-[#2C3E50] dark:bg-[#E74C3C] text-white rounded-lg font-bold hover:opacity-90 transition-all transform hover:-translate-y-1 shadow-lg">
+              お問い合わせはこちら
+            </a>
+            <a href="#about" className="px-8 py-4 border-2 border-[#2C3E50] dark:border-gray-500 rounded-lg font-bold hover:bg-[#2C3E50] hover:text-white dark:hover:bg-gray-500 transition-all">
+              プロフィールを見る
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section id="about" className={`py-24 px-6 max-w-6xl mx-auto transition-all duration-1000 transform ${isVisible.about ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+        <div className="grid md:grid-cols-3 gap-12">
+          {/* Sidebar Info */}
+          <div className="md:col-span-1">
+            <div className={`sticky top-32 text-center md:text-left`}>
+              <div className="w-48 h-48 mx-auto md:mx-0 rounded-full border-4 border-[#E74C3C] overflow-hidden mb-6 shadow-xl">
+                {/* SVG Placeholder for 50s Male Illustration */}
+                <svg viewBox="0 0 100 100" className="bg-gray-200">
+                  <circle cx="50" cy="40" r="20" fill="#4a5568" />
+                  <path d="M20 90C20 70 35 60 50 60C65 60 80 70 80 90" fill="#4a5568" />
+                  <rect x="35" y="45" width="30" height="2" fill="#fff" opacity="0.5" />
+                  <text x="50" y="95" fontSize="6" textAnchor="middle" fill="#999">Illustration: 50s Male</text>
+                </svg>
+              </div>
+              <h2 className="text-3xl font-bold mb-2">Mamabu</h2>
+              <p className="text-[#E74C3C] font-semibold mb-6">Science-based Writer</p>
+              
+              <div className="space-y-4 mb-8">
+                <div className="flex items-center justify-center md:justify-start space-x-3 opacity-80">
+                  <div className="w-2 h-2 rounded-full bg-[#E74C3C]"></div>
+                  <span>累計受注案件: 14件</span>
+                </div>
+                <div className="flex items-center justify-center md:justify-start space-x-3 opacity-80">
+                  <div className="w-2 h-2 rounded-full bg-[#E74C3C]"></div>
+                  <span>化学専攻 / 研究開発職出身</span>
+                </div>
+              </div>
+
+              <div className="flex justify-center md:justify-start space-x-4">
+                <a href="https://twitter.com/Mamabu20104321" target="_blank" className="p-3 bg-white dark:bg-gray-800 rounded-full shadow-md hover:text-[#E74C3C] transition-colors">
+                  <Twitter size={20} />
+                </a>
+                <a href="#" className="p-3 bg-white dark:bg-gray-800 rounded-full shadow-md hover:text-[#E74C3C] transition-colors">
+                  <Instagram size={20} />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="md:col-span-2 space-y-12">
+            <div>
+              <p className="text-lg leading-relaxed mb-6">
+                プロフィールをご覧いただき、ありがとうございます。<br /><br />
+                2025年よりフリーランスライターとして活動しております。
+                国立大学大学院にて化学を専攻し、製造業や研究機関での研究開発職を経て現在に至ります。
+              </p>
+
+              <div className="grid sm:grid-cols-2 gap-6 mt-12">
+                <div className={`p-8 rounded-2xl ${darkMode ? 'bg-gray-800/50' : 'bg-white shadow-sm'} border border-transparent hover:border-[#E74C3C] transition-all`}>
+                  <div className="w-12 h-12 bg-[#2C3E50] text-white rounded-lg flex items-center justify-center mb-6">
+                    <Search size={24} />
+                  </div>
+                  <h3 className="text-xl font-bold mb-4">論理的な構成</h3>
+                  <p className="opacity-70 text-sm leading-relaxed">
+                    研究職で培ったPREP法による論理構成。難解な専門用語を噛み砕き、図解を用いた視覚的なわかりやすさを追求します。
+                  </p>
+                </div>
+                <div className={`p-8 rounded-2xl ${darkMode ? 'bg-gray-800/50' : 'bg-white shadow-sm'} border border-transparent hover:border-[#E74C3C] transition-all`}>
+                  <div className="w-12 h-12 bg-[#E74C3C] text-white rounded-lg flex items-center justify-center mb-6">
+                    <Cpu size={24} />
+                  </div>
+                  <h3 className="text-xl font-bold mb-4">AI × ファクトチェック</h3>
+                  <p className="opacity-70 text-sm leading-relaxed">
+                    AIを効率的に活用しつつ、理系職特有の厳しい目でハルシネーションを精査。信頼できる一次情報に基づいた高品質な記事を提供します。
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold flex items-center">
+                <span className="w-8 h-1 bg-[#E74C3C] mr-4"></span>
+                対応可能なジャンル
+              </h3>
+              <div className="space-y-4">
+                {[
+                  { title: "自然科学・環境問題", detail: "化学・SDGsなど。専門知識に基づいた深みのある執筆が可能です。" },
+                  { title: "メンタルケア・働き方", detail: "実体験とエビデンスに基づいた自己管理・ウェルビーイング記事。" },
+                  { title: "海外旅行・英語リサーチ", detail: "豊富な渡航歴と英語ソースからの情報収集・記事化に対応。" }
+                ].map((item, idx) => (
+                  <div key={idx} className="flex items-start space-x-4 p-4 rounded-lg hover:bg-white/5 transition-colors">
+                    <ChevronRight className="mt-1 text-[#E74C3C]" size={20} />
+                    <div>
+                      <h4 className="font-bold">{item.title}</h4>
+                      <p className="opacity-70 text-sm mt-1">{item.detail}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className={`p-8 rounded-2xl ${darkMode ? 'bg-blue-900/20' : 'bg-[#2C3E50] text-white'} flex flex-wrap justify-around text-center gap-8`}>
+              <div>
+                <p className="text-sm opacity-70 mb-1">稼働目安</p>
+                <p className="text-xl font-bold">週1〜2本</p>
+              </div>
+              <div>
+                <p className="text-sm opacity-70 mb-1">納品スピード</p>
+                <p className="text-xl font-bold">2〜3日以内</p>
+              </div>
+              <div>
+                <p className="text-sm opacity-70 mb-1">レスポンス</p>
+                <p className="text-xl font-bold">24h以内</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section id="contact" className={`py-24 px-6 bg-gradient-to-b ${darkMode ? 'from-transparent to-black/30' : 'from-transparent to-white/50'}`}>
+        <div className={`max-w-4xl mx-auto transition-all duration-1000 transform ${isVisible.contact ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold mb-4">Get in Touch</h2>
+            <p className="opacity-70">制作のご依頼、お見積り、その他ご相談はお気軽にどうぞ。<br />3営業日以内に返信致します。</p>
+          </div>
+
+          <div className={`p-8 md:p-12 rounded-3xl ${darkMode ? 'bg-gray-800' : 'bg-white'} shadow-2xl`}>
+            <form className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-bold mb-2 opacity-70">お名前</label>
+                  <input type="text" className={`w-full p-4 rounded-xl border ${darkMode ? 'bg-gray-700 border-gray-600 focus:border-[#E74C3C]' : 'bg-gray-50 border-gray-200 focus:border-[#2C3E50]'} outline-none transition-all`} placeholder="田中 太郎" />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold mb-2 opacity-70">メールアドレス</label>
+                  <input type="email" className={`w-full p-4 rounded-xl border ${darkMode ? 'bg-gray-700 border-gray-600 focus:border-[#E74C3C]' : 'bg-gray-50 border-gray-200 focus:border-[#2C3E50]'} outline-none transition-all`} placeholder="example@mail.com" />
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-bold mb-2 opacity-70">お問い合わせ内容</label>
+                <textarea rows="5" className={`w-full p-4 rounded-xl border ${darkMode ? 'bg-gray-700 border-gray-600 focus:border-[#E74C3C]' : 'bg-gray-50 border-gray-200 focus:border-[#2C3E50]'} outline-none transition-all`} placeholder="ご依頼内容の詳細、納期、ご予算などをご記入ください"></textarea>
+              </div>
+              <button className="w-full py-4 bg-[#E74C3C] text-white rounded-xl font-bold hover:opacity-90 transition-all shadow-lg flex items-center justify-center space-x-2">
+                <span>送信する</span>
+                <Send size={18} />
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className={`py-12 px-6 border-t ${darkMode ? 'border-gray-800' : 'border-gray-200'}`}>
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
+          <div className="text-xl font-bold">MAMABU<span className="text-[#E74C3C]">.</span></div>
+          <p className="text-sm opacity-50">© 2025 Mamabu Writer Portfolio. All Rights Reserved.</p>
+          <div className="flex space-x-6 opacity-70">
+            <a href="https://twitter.com/Mamabu20104321" className="hover:text-[#E74C3C] transition-colors"><Twitter size={20} /></a>
+            <a href="#" className="hover:text-[#E74C3C] transition-colors"><Instagram size={20} /></a>
+            <a href="mailto:info@example.com" className="hover:text-[#E74C3C] transition-colors"><Mail size={20} /></a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default App;
